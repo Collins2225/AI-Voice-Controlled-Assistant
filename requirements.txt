@@ -1,0 +1,8 @@
+SpeechRecognition==3.10.0
+pyaudio==0.2.14
+pynput==1.7.6
+sounddevice==0.4.6
+torch==2.0.1
+torchaudio==2.0.2
+scipy==1.11.4
+numpy==1.24.3
