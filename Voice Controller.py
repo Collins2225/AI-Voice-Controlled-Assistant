@@ -1,5 +1,6 @@
 """
-Secure Voice Media Controller
+Secure Voice Media Controller - IMPROVED VERSION
+Enhanced microphone sensitivity for better distance detection
 Two-layer security: Startup password + Wake word
 """
 
@@ -12,7 +13,13 @@ import hashlib
 
 keyboard = Controller()
 recognizer = sr.Recognizer()
-recognizer.energy_threshold = 400
+
+# IMPROVED MICROPHONE SETTINGS FOR DISTANCE
+recognizer.energy_threshold = 200  # Lower = more sensitive (was 400)
+recognizer.dynamic_energy_threshold = True  # Adapts to ambient noise
+recognizer.dynamic_energy_adjustment_damping = 0.15
+recognizer.dynamic_energy_ratio = 1.5
+recognizer.pause_threshold = 0.8  # How long to wait for speech
 
 WAKE_WORD = "computer"
 ACTIVE_SESSION_DURATION = 60
@@ -22,6 +29,20 @@ MAX_PASSWORD_ATTEMPTS = 3
 session_active = False
 last_command_time = 0
 program_unlocked = False
+
+
+def adjust_microphone_for_distance(source, duration=1.5):
+    """
+    Enhanced microphone adjustment for better distance detection
+    """
+    print("Calibrating microphone for room acoustics...")
+
+    # Longer calibration for better ambient noise filtering
+    recognizer.adjust_for_ambient_noise(source, duration=duration)
+
+    # Additional boost for distance
+    if hasattr(source, 'CHUNK'):
+        source.CHUNK = 2048  # Larger chunks for better capture
 
 
 def setup_password():
@@ -37,17 +58,18 @@ def setup_password():
     while True:
         with sr.Microphone() as source:
             print("\nSay your new password...")
-            recognizer.adjust_for_ambient_noise(source, duration=1)
+            adjust_microphone_for_distance(source)
 
             try:
-                audio = recognizer.listen(source, timeout=5, phrase_time_limit=3)
+                # Longer timeout for distance speaking
+                audio = recognizer.listen(source, timeout=10, phrase_time_limit=5)
                 password_text = recognizer.recognize_google(audio).lower()
 
                 print(f"You said: '{password_text}'")
                 print("\nSay it again to confirm...")
 
-                recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                confirm_audio = recognizer.listen(source, timeout=5, phrase_time_limit=3)
+                adjust_microphone_for_distance(source, duration=1.0)
+                confirm_audio = recognizer.listen(source, timeout=10, phrase_time_limit=5)
                 confirm_text = recognizer.recognize_google(confirm_audio).lower()
 
                 if password_text == confirm_text:
@@ -72,8 +94,10 @@ def setup_password():
                     print(f"First: '{password_text}'")
                     print(f"Second: '{confirm_text}'")
 
+            except sr.WaitTimeoutError:
+                print("Timeout - no speech detected. Speak louder or move closer.")
             except sr.UnknownValueError:
-                print("Could not understand. Please try again.")
+                print("Could not understand. Speak more clearly.")
             except sr.RequestError:
                 print("Network error. Check internet connection.")
             except Exception as e:
@@ -138,8 +162,10 @@ def unlock_program():
             print("Say password...")
 
             try:
-                recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                audio = recognizer.listen(source, timeout=5, phrase_time_limit=3)
+                adjust_microphone_for_distance(source)
+
+                # Longer listening time for distance
+                audio = recognizer.listen(source, timeout=10, phrase_time_limit=5)
                 spoken_text = recognizer.recognize_google(audio)
 
                 print(f"You said: '{spoken_text}'")
@@ -161,9 +187,12 @@ def unlock_program():
                         print("Too many failed attempts.")
                         return False
 
+            except sr.WaitTimeoutError:
+                attempts -= 1
+                print("Timeout. Speak louder or move closer.")
             except sr.UnknownValueError:
                 attempts -= 1
-                print("Could not understand. Try again.")
+                print("Could not understand. Speak more clearly.")
             except sr.RequestError:
                 print("Network error.")
             except Exception as e:
@@ -239,7 +268,7 @@ def control_media(command):
 def display_status():
     """Display current program status"""
     print("\n" + "=" * 60)
-    print("VOICE MEDIA CONTROLLER")
+    print("VOICE MEDIA CONTROLLER - IMPROVED")
     print("=" * 60)
 
     if program_unlocked:
@@ -258,6 +287,11 @@ def display_status():
     print("Media: play, pause, next, previous, volume up/down, mute")
     print("System: lock program")
     print("-" * 60)
+    print("\nMicrophone Settings:")
+    print(f"  Sensitivity: HIGH (optimized for distance)")
+    print(f"  Energy Threshold: {recognizer.energy_threshold}")
+    print(f"  Dynamic Adjustment: Enabled")
+    print("-" * 60)
     print("Press Ctrl+C to exit")
     print("=" * 60)
 
@@ -267,9 +301,10 @@ def main():
     global session_active, last_command_time, program_unlocked
 
     print("=" * 60)
-    print("SECURE VOICE MEDIA CONTROLLER")
+    print("SECURE VOICE MEDIA CONTROLLER - IMPROVED")
     print("=" * 60)
-    print("Security layers:")
+    print("Enhanced for better distance detection")
+    print("\nSecurity layers:")
     print("1. Startup password (voice)")
     print(f"2. Wake word: '{WAKE_WORD}'")
     print("=" * 60)
@@ -299,8 +334,11 @@ def main():
                     print(f"\nListening for command... ({int(remaining)} seconds)")
 
                     try:
-                        recognizer.adjust_for_ambient_noise(source, duration=0.2)
-                        audio = recognizer.listen(source, timeout=3, phrase_time_limit=2)
+                        # Quick adjustment for active session
+                        adjust_microphone_for_distance(source, duration=0.5)
+
+                        # Longer timeout and phrase limit for distance
+                        audio = recognizer.listen(source, timeout=5, phrase_time_limit=4)
 
                         command = recognizer.recognize_google(audio)
                         print(f"Command: {command}")
@@ -308,16 +346,22 @@ def main():
                         if control_media(command):
                             last_command_time = time.time()
 
+                    except sr.WaitTimeoutError:
+                        pass  # Timeout is normal, just continue
                     except sr.UnknownValueError:
-                        pass
+                        pass  # Couldn't understand, continue listening
                     except Exception as e:
                         print(f"Error: {e}")
 
             else:
+                # Waiting for wake word
                 with sr.Microphone() as source:
                     try:
-                        recognizer.adjust_for_ambient_noise(source, duration=0.3)
-                        audio = recognizer.listen(source, timeout=1, phrase_time_limit=1)
+                        # Calibrate for wake word detection
+                        adjust_microphone_for_distance(source, duration=0.7)
+
+                        # Longer listening for wake word from distance
+                        audio = recognizer.listen(source, timeout=None, phrase_time_limit=3)
 
                         text = recognizer.recognize_google(audio).lower()
 
