@@ -42,7 +42,7 @@ Enables or blocks commands based on session status
 
 Logs session events for debugging or auditing
 
-#Architecture Overview
+# Architecture Overview
  ┌──────────────────────────┐
  │      Wake Word Engine    │
  └──────────────┬───────────┘
