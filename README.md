@@ -27,3 +27,46 @@ Session‑based command execution
 
 Automatic session timeout for added protection
 
+# Adaptive Audio Processing
+
+Distance‑optimized microphone sensitivity
+
+Real‑time noise handling
+
+Automatic calibration on startup
+
+# Intelligent Session Management
+Tracks authentication state
+
+Enables or blocks commands based on session status
+
+Logs session events for debugging or auditing
+
+#Architecture Overview
+ ┌──────────────────────────┐
+ │      Wake Word Engine    │
+ └──────────────┬───────────┘
+                │
+                ▼
+ ┌──────────────────────────┐
+ │  Voice Authentication     │
+ │ (Password Verification)   │
+ └──────────────┬───────────┘
+                │ Auth OK
+                ▼
+ ┌──────────────────────────┐
+ │   Active Session Manager  │
+ │ (Timeout + State Control) │
+ └──────────────┬───────────┘
+                │
+                ▼
+ ┌──────────────────────────┐
+ │  Command Recognition      │
+ │ (Media Commands Parser)   │
+ └──────────────┬───────────┘
+                │
+                ▼
+ ┌──────────────────────────┐
+ │   System Media Controller │
+ └──────────────────────────┘
+
