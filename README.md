@@ -42,5 +42,69 @@ Enables or blocks commands based on session status
 
 Logs session events for debugging or auditing
 
+secure-voice-media-controller/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+├── requirements.txt
+├── setup.py
+├── config.yaml
+│
+├── docs/
+│   ├── architecture.md
+│   ├── api_reference.md
+│   ├── installation.md
+│   └── usage.md
+│
+├── src/
+│   ├── __init__.py
+│   │
+│   ├── audio_processing/
+│   │   ├── __init__.py
+│   │   ├── speech_to_text.py
+│   │   ├── voice_activity_detection.py
+│   │   └── audio_preprocessing.py
+│   │
+│   ├── authentication/
+│   │   ├── __init__.py
+│   │   ├── voice_authentication.py
+│   │   └── encryption.py
+│   │
+│   ├── command_processing/
+│   │   ├── __init__.py
+│   │   ├── command_parser.py
+│   │   └── intent_detection.py
+│   │
+│   ├── media_controller/
+│   │   ├── __init__.py
+│   │   ├── media_player.py
+│   │   ├── volume_control.py
+│   │   └── playlist_manager.py
+│   │
+│   └── main.py
+│
+├── models/
+│   ├── speech_models/
+│   └── authentication_models/
+│
+├── datasets/
+│   ├── voice_samples/
+│   └── training_data/
+│
+├── scripts/
+│   ├── train_model.py
+│   └── preprocess_dataset.py
+│
+├── tests/
+│   ├── test_audio_processing.py
+│   ├── test_authentication.py
+│   ├── test_command_processing.py
+│   └── test_media_controller.py
+│
+└── examples/
+    ├── demo_voice_commands.py
+    └── example_audio_files/
+
 
 
