@@ -42,7 +42,7 @@ Enables or blocks commands based on session status
 
 Logs session events for debugging or auditing
 
-secure-voice-media-controller/
+# secure-voice-media-controller
 │
 ├── README.md
 ├── LICENSE
@@ -95,16 +95,3 @@ secure-voice-media-controller/
 ├── scripts/
 │   ├── train_model.py
 │   └── preprocess_dataset.py
-│
-├── tests/
-│   ├── test_audio_processing.py
-│   ├── test_authentication.py
-│   ├── test_command_processing.py
-│   └── test_media_controller.py
-│
-└── examples/
-    ├── demo_voice_commands.py
-    └── example_audio_files/
-
-
-
