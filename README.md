@@ -4,3 +4,26 @@ A secure, voice‑controlled media assistant with multi‑layer authentication a
 
 The Secure Voice Media Controller enables real‑time, hands‑free media control while prioritizing security, accuracy, and environmental adaptability. It combines wake‑word activation, voice‑based authentication, and dynamic microphone calibration to deliver a reliable voice interface suitable for desktops, smart‑home systems, and embedded devices.
 
+# Features
+
+Voice‑Driven Media Control
+Control system media functions such as:
+
+Play / Pause
+
+Volume Up / Down
+
+Mute
+
+Next / Previous Track
+
+# Multi‑Layer Security
+
+Wake‑word activation prevents accidental triggers
+
+Voice password authentication ensures only authorized users can start a session
+
+Session‑based command execution
+
+Automatic session timeout for added protection
+
