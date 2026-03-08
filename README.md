@@ -42,31 +42,5 @@ Enables or blocks commands based on session status
 
 Logs session events for debugging or auditing
 
-# Architecture Overview
- ┌──────────────────────────┐
- │      Wake Word Engine    │
- └──────────────┬───────────┘
-                │
-                ▼
- ┌──────────────────────────┐
- │  Voice Authentication     │
- │ (Password Verification)   │
- └──────────────┬───────────┘
-                │ Auth OK
-                ▼
- ┌──────────────────────────┐
- │   Active Session Manager  │
- │ (Timeout + State Control) │
- └──────────────┬───────────┘
-                │
-                ▼
- ┌──────────────────────────┐
- │  Command Recognition      │
- │ (Media Commands Parser)   │
- └──────────────┬───────────┘
-                │
-                ▼
- ┌──────────────────────────┐
- │   System Media Controller │
- └──────────────────────────┘
+
 
